@@ -1,0 +1,62 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "io.freefair.lombok" version "6.4.3"
+}
+
+group = 'org.masil.eventstore'
+def javaProjects = [
+        project("domain"),
+        project("application"),
+        project("adapter")
+]
+def springBootProjects = [
+        project("application"),
+        project("adapter")
+]
+
+configure(javaProjects) {
+    apply plugin: "java-library"
+    apply plugin: "io.freefair.lombok"
+    sourceCompatibility = '11'
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+
+        implementation 'org.slf4j:slf4j-api:1.7.32'
+        implementation 'org.hibernate:hibernate-validator:6.2.0.Final'
+        implementation 'org.glassfish:javax.el:3.0.0'
+
+        if (!springBootProjects.contains(project)) {
+            testImplementation(platform('org.junit:junit-bom:5.7.1'))
+            testImplementation('org.junit.jupiter:junit-jupiter')
+            testImplementation 'org.assertj:assertj-core:3.20.2'
+            testImplementation 'org.mockito:mockito-junit-jupiter:4.0.0'
+        }
+    }
+}
+
+configure(springBootProjects) {
+    apply plugin: "org.springframework.boot"
+    apply plugin: "io.spring.dependency-management"
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        runtimeOnly 'org.postgresql:postgresql'
+
+        testImplementation "org.springframework.boot:spring-boot-starter-test"
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+
+}

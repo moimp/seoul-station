@@ -1,0 +1,28 @@
+server:
+  port: 8083
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        jdbc:
+          core:
+            JdbcTemplate: DEBUG
+            StatementCreatorUtils: TRACE
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5555/eventstore
+    username: eventstore
+    password: eventstore
+
+aws:
+  sqs:
+    events-relay: EVENTS-RELAY-QUEUE-DEV
+  sns:
+    member-joined: TEST
+
+management:
+  endpoint:
+    health:
+      show-details: always

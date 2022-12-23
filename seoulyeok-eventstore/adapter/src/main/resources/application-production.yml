@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    url: ${EVENT_STORE_DATASOURCE_URL}
+    username: ${EVENT_STORE_DATASOURCE_USERNAME}
+    password: ${EVENT_STORE_DATASOURCE_PASSWORD}
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+
+id-generator:
+  url: ${ID_GENERATOR_URL}
+
+aws:
+  sqs:
+    events-relay: EVENTS-RELAY-QUEUE
+
+server:
+  port: 5000
+
+logging:
+  level:
+    root: WARN
+    com:
+      trevari: INFO
+
+management:
+  endpoint:
+    health:
+      show-details: always
