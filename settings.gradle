@@ -6,3 +6,8 @@ include('seoulyeok-eventstore:domain',
         'seoulyeok-eventstore:adapter'
 )
 
+include("seoulyeok-message-pulling")
+include('seoulyeok-message-pulling:domain',
+        'seoulyeok-message-pulling:application',
+        'seoulyeok-message-pulling:adapter'
+)

@@ -1,0 +1,33 @@
+server:
+  port: 5000
+
+logging:
+  level:
+    root: WARN
+    com:
+      trevari: INFO
+
+spring:
+  datasource:
+    url: ${EVENT_STORE_DATASOURCE_URL}
+    username: ${EVENT_STORE_DATASOURCE_USERNAME}
+    password: ${EVENT_STORE_DATASOURCE_PASSWORD}
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+
+id-generator:
+  url: ${ID_GENERATOR_URL}
+
+message-relay:
+  url: ${MESSAGE_RELAY_URL}
+
+pipeline:
+  url: ${${PIPELINE_URL}}

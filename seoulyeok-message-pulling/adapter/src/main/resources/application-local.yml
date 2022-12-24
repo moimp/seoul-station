@@ -1,0 +1,20 @@
+server:
+  port: 8083
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        jdbc:
+          core:
+            JdbcTemplate: DEBUG
+            StatementCreatorUtils: TRACE
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5555/eventstore
+    username: eventstore
+    password: eventstore
+
+id-generator:
+  aggregateId: 1L
