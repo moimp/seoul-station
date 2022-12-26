@@ -11,3 +11,13 @@ include('seoulyeok-message-pulling:domain',
         'seoulyeok-message-pulling:application',
         'seoulyeok-message-pulling:adapter'
 )
+
+include("seoulyeok-message-relay")
+include('seoulyeok-message-relay:domain',
+        'seoulyeok-message-relay:application',
+        'seoulyeok-message-relay:adapter'
+)
+
+include("seoulyeok-message-dispatcher")
+
+//TODO message-relay, assign
