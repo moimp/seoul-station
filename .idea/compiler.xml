@@ -10,7 +10,6 @@
         <module name="seoulyeok.seoulyeok-message-dispatcher.test" />
         <module name="seoulyeok.seoulyeok-eventstore.domain.test" />
         <module name="seoulyeok.seoulyeok-message-pulling.domain.test" />
-        <module name="seoulyeok.seoulyeok-message-pulling.domain.main" />
         <module name="seoulyeok.seoulyeok-message-pulling.adapter.test" />
         <module name="seoulyeok.seoulyeok-eventstore.application.test" />
         <module name="seoulyeok.seoulyeok-message-dispatcher.main" />

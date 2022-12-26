@@ -4,7 +4,7 @@ plugins {
     id "io.freefair.lombok" version "6.5.0-rc1"
 }
 
-group 'com.trevari.events'
+group 'org.masil.seoulyeok.events'
 
 repositories {
     mavenCentral()
