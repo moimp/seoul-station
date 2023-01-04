@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+  license:
+    name: MIT
+  title: notification
+  version: 1.0.2
+servers:
+- url: /
+paths:
+  /apis/events/relay:
+    post:
+      description: 특정 메세지를 목적지로 전달합니다
+      operationId: deliveryToDestination
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelayRequest'
+        description: deliveryToDestination
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: "데이터 전송 성공 code = 0, meg: ok"
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: "입력이 유효하지 않습니다 code = -1, meg: fail"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: "시스템 오류 발생 code = -1, meg: fail"
+      summary: 특정 메세지를 목적지로 전달합니다
+      tags:
+      - relay
+components:
+  schemas:
+    RelayRequest:
+      example:
+        payloadVersion: 1.0.0
+        payload: "{ \"eventId\": 1 }"
+        destinationId: 54321
+      properties:
+        payload:
+          example: "{ \"eventId\": 1 }"
+          type: string
+        destinationId:
+          example: 54321
+          format: int64
+          type: integer
+        payloadVersion:
+          example: 1.0.0
+          pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\\
+            d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\\
+            +([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+          type: string
+      required:
+      - destinationId
+      - payload
+      - payloadVersion
+      type: object
+    RelayClientRequest:
+      properties:
+        destinationType:
+          example: SIMPLE_QUEUE
+          type: string
+        messagePayload:
+          example: "{ \"eventId\": 1 }"
+          type: string
+        destinationName:
+          example: settled.fifo
+          type: string
+        payloadVersion:
+          example: 1.0.0
+          pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\\
+            d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\\
+            +([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+          type: string
+      required:
+      - destinationName
+      - destinationType
+      - messagePayload
+      - payloadVersion
+      type: object
+    Result:
+      example:
+        code: 1
+        message: success | fail
+      properties:
+        code:
+          example: 1
+          type: integer
+        message:
+          example: success | fail
+          type: string
+      required:
+      - value
+      type: object
