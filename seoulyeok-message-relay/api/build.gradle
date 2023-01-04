@@ -1,0 +1,117 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+buildscript {
+    dependencies {
+        classpath project(':codegen')
+    }
+}
+
+plugins {
+    id 'java-library'
+    id "org.springframework.boot"
+    id "io.spring.dependency-management"
+    id "org.openapi.generator" version "5.2.1"
+    id "io.freefair.lombok"
+
+
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+
+ext {
+    set('springCloudVersion', "2.4.1")
+}
+
+
+group 'org.masil.seoulyeok.events.relay'
+
+project.sourceSets.test.resources.srcDirs = [ "${projectDir}/src/test/resources", "${rootDir}/schema" ]
+
+
+dependencies {
+
+    implementation('io.awspring.cloud:spring-cloud-starter-aws-messaging:2.4.1') {
+        exclude group: 'com.amazonaws', module: 'aws-java-sdk-s3'
+    }
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-test'
+
+    //fixed for swagger
+    compileOnly 'io.swagger:swagger-annotations:1.6.2'
+    compileOnly 'jakarta.validation:jakarta.validation-api:2.0.2'
+    compileOnly 'org.openapitools:jackson-databind-nullable:0.1.0'
+
+    implementation 'org.springframework.cloud:spring-cloud-config-client:3.1.3'
+
+    implementation 'com.github.LenKIM.identifier:identifier-generator:0.0.36'
+
+    implementation 'com.github.moimp:domain-core:0.0.2'
+
+    implementation project(':seoulyeok-message-relay:messages')
+
+    implementation 'org.json:json:20220320'
+}
+
+def swaggerRoot = "$projectDir/src/main/swagger-config".toString()
+def swaggerAPIOutput = "$projectDir/src/main".toString()
+
+openApiValidate {
+    inputSpec="$swaggerRoot/api.yml".toString()
+    recommend=true
+}
+
+openApiGenerate {
+    inputSpec="$swaggerRoot/api.yml".toString()
+    generatorName = "trevari"
+    configFile= "$swaggerRoot/config.json".toString()
+    outputDir= "$swaggerAPIOutput".toString()
+    configOptions = [
+            "sourceFolder" : "swagger-codegen"
+    ]
+}
+tasks.named("openApiGenerate") {
+    def outputDir = openApiGenerate.outputDir.get()
+    it.doFirst {
+        delete outputDir +"/"+ openApiGenerate.configOptions["sourceFolder"].get()
+    }
+
+    it.doLast {
+        delete "${outputDir}/pom.xml"
+        delete "${outputDir}/README.md"
+        delete "${outputDir}/.openapi-generator-ignore"
+        delete "${outputDir}/.openapi-generator"
+    }
+}
+
+task openApiYmlGenerate(type: GenerateTask) {
+    inputSpec = "$swaggerRoot/api.yml".toString()
+    generatorName = "openapi-yaml".toString()
+    outputDir = "$swaggerAPIOutput/resources/swagger/".toString()
+    configOptions = [
+            outputFile: "openapi.yml"
+    ]
+
+    it.doFirst {
+        delete "$swaggerAPIOutput/resources/swagger/"
+    }
+}
+
+tasks.openApiGenerate.dependsOn  tasks.openApiValidate
+tasks.compileJava.dependsOn tasks.openApiGenerate, tasks.openApiYmlGenerate
+sourceSets.main.java.srcDir "${openApiGenerate.outputDir.get()}/${openApiGenerate.configOptions['sourceFolder'].get()}"
+sourceSets.main.resources.srcDir "${openApiGenerate.outputDir.get()}/src/main/resources"
+
+
+test {
+    useJUnitPlatform()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:${springCloudVersion}"
+    }
+}

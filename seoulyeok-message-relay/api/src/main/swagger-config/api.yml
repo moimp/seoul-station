@@ -1,0 +1,97 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.2
+  title: notification
+  license:
+    name: MIT
+paths:
+  /apis/events/relay:
+    post:
+      tags:
+        - relay
+      summary: "특정 메세지를 목적지로 전달합니다"
+      description: "특정 메세지를 목적지로 전달합니다"
+      operationId: "deliveryToDestination"
+      requestBody:
+        description: "deliveryToDestination"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RelayRequest"
+
+      responses:
+        '200':
+          description: "데이터 전송 성공 code = 0, meg: ok"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
+        '400':
+          description: "입력이 유효하지 않습니다 code = -1, meg: fail"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
+
+        '500':
+          description: "시스템 오류 발생 code = -1, meg: fail"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
+
+components:
+  schemas:
+    RelayRequest:
+      type: "object"
+      required: [
+          payload,
+          destinationId,
+          payloadVersion
+      ]
+      properties:
+        payload:
+          type: 'string'
+          example: "{ \"eventId\": 1 }"
+        destinationId:
+          type: 'integer'
+          format: 'int64'
+          example: '54321'
+        payloadVersion:
+          type: 'string'
+          example: "1.0.0"
+          pattern: ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
+    RelayClientRequest:
+      type: "object"
+      required: [
+          destinationType,
+          messagePayload,
+          destinationName,
+          payloadVersion
+      ]
+      properties:
+        destinationType:
+          type: 'string'
+          example: "SIMPLE_QUEUE"
+        messagePayload:
+          type: 'string'
+          example: "{ \"eventId\": 1 }"
+        destinationName:
+          type: 'string'
+          example: 'settled.fifo'
+        payloadVersion:
+          type: 'string'
+          example: "1.0.0"
+          pattern: ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
+    Result:
+      type: "object"
+      required:
+        - value
+      properties:
+        code:
+          type: "integer"
+          example: 1
+        message:
+          type: "string"
+          example: "success | fail"

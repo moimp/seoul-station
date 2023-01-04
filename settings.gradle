@@ -1,5 +1,7 @@
 rootProject.name = 'seoulyeok'
 
+include("codegen")
+
 include("seoulyeok-eventstore")
 include('seoulyeok-eventstore:domain',
         'seoulyeok-eventstore:application',
@@ -13,11 +15,17 @@ include('seoulyeok-message-pulling:domain',
 )
 
 include("seoulyeok-message-relay")
-include('seoulyeok-message-relay:domain',
-        'seoulyeok-message-relay:application',
-        'seoulyeok-message-relay:adapter'
-)
+include("seoulyeok-message-relay:api")
+include("seoulyeok-message-relay:messages")
+include("seoulyeok-message-relay:persistence")
+include("seoulyeok-message-relay:domain")
+include("seoulyeok-message-relay:application")
+
+include("seoulyeok-message-assign")
 
 include("seoulyeok-message-dispatcher")
+include('refs:destination')
+include('refs:event')
+
 
 //TODO message-relay, assign

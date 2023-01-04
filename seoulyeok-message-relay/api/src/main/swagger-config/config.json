@@ -1,0 +1,23 @@
+{
+
+  "library": "spring-boot",
+  "interfaceOnly" : true,
+  "basePackage" : "com.trevari.events.relay",
+  "configPackage" : "com.trevari.events.relay.config",
+  "modelPackage": "com.trevari.events.relay.models",
+  "apiPackage": "com.trevari.events.relay.api",
+  "invokerPackage": "com.trevari.events.relay.api",
+  "useTags" : true,
+  "skipDefaultInterface" : true,
+  "dateLibrary": "java8",
+  "useBeanValidation" : true,
+  "serializableModel" : true,
+  "implicitHeaders" : false,
+  "swaggerDocketConfig": false,
+  "hideGenerationTimestamp": true,
+
+  "useSpringfox": false,
+  "reactive": false,
+  "openApiNullable" : false
+
+}

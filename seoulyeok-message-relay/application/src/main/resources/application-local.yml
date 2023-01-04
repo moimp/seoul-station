@@ -1,0 +1,40 @@
+server:
+  port: 8073
+spring:
+  cloud:
+    config:
+      enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:6543/message-relay
+    username: message-relay
+    password: dpdlxlatm!3@4
+  web:
+    resources:
+      static-locations: classpath:/static
+  devtools:
+    livereload:
+      enabled: true
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+
+id-generator:
+  url: "https://not-exists-idgen-url.com"
+
+alert:
+  notifier:
+    url: http://localhost:8929/apis
+  slack:
+    channel: C02LDAM3A76
+
+
+relay:
+  batch:
+    size: 100

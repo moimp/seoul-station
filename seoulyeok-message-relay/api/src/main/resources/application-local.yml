@@ -1,0 +1,23 @@
+server:
+  port: 8071
+
+spring:
+  cloud:
+    config:
+      enabled: false
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+
+id-generator:
+  url: "https://not-exists-idgen-url.com"
+
+aws:
+  sqs:
+    pulled-events-received: PULLED-EVENTS-RECEIVED-DEV

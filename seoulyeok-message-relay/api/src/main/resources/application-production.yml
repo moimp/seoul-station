@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: message-relay-api
+  config:
+    import: "optional:configserver:https://config.trevari.co.kr"
